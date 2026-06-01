@@ -55,7 +55,7 @@ class QualificationControllerTest {
     return robot.lookup("#choiceBoxVerdict").queryAs(ChoiceBox.class);
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
+  // @Disabled("Retire cette annotation pour activer le test")
   @Test
   @Order(1)
   void le_tableview_est_alimente_par_les_sequences_de_la_nuit(FxRobot robot) {

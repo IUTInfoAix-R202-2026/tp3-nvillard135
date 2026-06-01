@@ -34,7 +34,7 @@ class VueAccueilControllerTest {
     new VueAccueil().start(stage);
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
+  // @Disabled("Retire cette annotation pour activer le test")
   @Test
   @Order(1)
   void l_entete_avec_titre_et_sous_titre_est_affichee(FxRobot robot) {
@@ -44,7 +44,7 @@ class VueAccueilControllerTest {
         .isNotNull();
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
+  // @Disabled("Retire cette annotation pour activer le test")
   @Test
   @Order(2)
   void le_bouton_nouveau_site_est_present_dans_l_entete(FxRobot robot) {

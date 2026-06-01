@@ -35,7 +35,7 @@ class SiteCarteTest {
     stage.show();
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
+  // @Disabled("Retire cette annotation pour activer le test")
   @Test
   @Order(1)
   void le_numero_de_carre_est_affiche_dans_la_carte(FxRobot robot) {
