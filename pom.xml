@@ -108,6 +108,14 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>openjfx-monocle</artifactId>
+            <version>21.0.2</version>
+            <scope>test</scope>
+        </dependency>
+
+
         <!-- Mockito -->
         <dependency>
             <groupId>org.mockito</groupId>
@@ -149,6 +157,11 @@
                 </configuration>
             </plugin>
 
+            <!-- Monocle fallback pour exécuter TestFX en headless si besoin -->
+            <!-- Ajout d'une dépendance test-only qui fournit la plateforme Monocle. -->
+            <!-- TestFX propose un artefact openjfx-monocle aligné sur la version TestFX. -->
+
+
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -184,25 +197,22 @@
                 <configuration>
                     <!-- TestFX requires classpath mode (not module path) -->
                     <useModulePath>false</useModulePath>
-                    <!-- Headless Platform JavaFX 26 (Gluon) : plateforme Glass logicielle, sans
-                         natif ni serveur d'affichage. Aucune fenêtre TestFX/JavaFX n'apparaît à
-                         l'écran, localement comme en CI, et plus besoin de xvfb. Le robot Glass
-                         pilote la plateforme Headless, le pipeline de rendu logiciel (sw)
-                         remplace le GPU. Remplace l'ancien bricolage Monocle.
-                         NB : on NE met PAS testfx.headless=true : ce flag déclencherait le vieux
-                         bootstrap Monocle de TestFX (recherche de MonoclePlatformFactory, classe
-                         absente sans la dépendance monocle). Le headless vient ici de
-                         glass.platform=Headless, pas de TestFX. -->
+                    <forkCount>0</forkCount>
+                    <reuseForks>false</reuseForks>
+                    <!-- TestFX démarre en headless via Monocle pour que les tests JavaFX
+                         puissent tourner sans serveur d'affichage dans ce conteneur. -->
                     <systemPropertyVariables>
-                        <glass.platform>Headless</glass.platform>
                         <prism.order>sw</prism.order>
                         <java.awt.headless>true</java.awt.headless>
                         <testfx.robot>glass</testfx.robot>
+                        <testfx.headless>true</testfx.headless>
+                        <monocle.platform>Headless</monocle.platform>
                     </systemPropertyVariables>
                     <argLine>
                         --enable-native-access=ALL-UNNAMED
                         --enable-native-access=javafx.graphics
                         --add-reads javafx.graphics=ALL-UNNAMED
+                        --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
                         --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
                         --add-opens javafx.base/com.sun.javafx.runtime=ALL-UNNAMED
                         --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
@@ -225,9 +235,9 @@
                         <googleJavaFormat>
                             <version>${google.java.format.version}</version>
                         </googleJavaFormat>
-                        <removeUnusedImports/>
-                        <trimTrailingWhitespace/>
-                        <endWithNewline/>
+                        <removeUnusedImports />
+                        <trimTrailingWhitespace />
+                        <endWithNewline />
                     </java>
                 </configuration>
             </plugin>
